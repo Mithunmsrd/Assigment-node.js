@@ -1,0 +1,43 @@
+const readline = require('readline');
+
+// Create interface for reading from console
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+// Function to count word frequency
+function countWordFrequency(text) {
+  const wordMap = new Map();
+  // Split text into words and iterate over each word
+  text.toLowerCase().split(/\s+/).forEach(word => {
+    // Remove punctuation
+    word = word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
+    // Check if word is not empty
+    if (word.trim() !== '') {
+      // If word already exists in map, increment count, otherwise add it with count 1
+      wordMap.set(word, (wordMap.get(word) || 0) + 1);
+    }
+  });
+  return wordMap;
+}
+
+// Function to sort word frequency map by frequency in descending order
+function sortWordFrequency(wordMap) {
+  return new Map([...wordMap.entries()].sort((a, b) => b[1] - a[1]));
+}
+
+// Prompt user for input
+rl.question('Enter text: ', (text) => {
+  // Count word frequency
+  const wordFrequency = countWordFrequency(text);
+  // Sort word frequency map
+  const sortedWordFrequency = sortWordFrequency(wordFrequency);
+  // Print sorted word frequency
+  console.log('Word Frequency:');
+  sortedWordFrequency.forEach((value, key) => {
+    console.log(`${key}: ${value}`);
+  });
+  // Close readline interface
+  rl.close();
+});

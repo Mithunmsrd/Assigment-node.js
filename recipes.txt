@@ -1,0 +1,58 @@
+const searchForm = document.getElementById("search-form");
+const ingredientsInput = document.getElementById("ingredients");
+const recipeList = document.getElementById("recipe-list");
+const favoritesList = document.getElementById("favorites-list");
+
+// Retrieve recipes from localStorage or use a predefined array
+let recipes = JSON.parse(localStorage.getItem("recipes")) || [
+    { name: "Chicken Curry", ingredients: ["chicken", "curry powder", "coconut milk"] },
+    { name: "Tomato Pasta", ingredients: ["pasta", "tomato", "garlic", "basil"] },
+    // Add more predefined recipes here
+];
+
+// Display recipes
+function displayRecipes(recipesArray, targetElement) {
+    targetElement.innerHTML = "";
+    recipesArray.forEach((recipe, index) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = recipe.name;
+        listItem.dataset.index = index;
+        listItem.addEventListener("click", () => {
+            toggleFavorite(index);
+        });
+        targetElement.appendChild(listItem);
+    });
+}
+
+// Toggle favorite status of a recipe
+function toggleFavorite(index) {
+    const recipe = recipes[index];
+    const isFavorite = recipe.favorite || false;
+
+    if (!isFavorite) {
+        recipe.favorite = true;
+    } else {
+        delete recipe.favorite;
+    }
+
+    updateLocalStorage();
+    displayRecipes(recipes.filter(recipe => recipe.favorite), favoritesList);
+}
+
+// Update localStorage with the current recipes array
+function updateLocalStorage() {
+    localStorage.setItem("recipes", JSON.stringify(recipes));
+}
+
+// Event listener for form submission
+searchForm.addEventListener("submit", event => {
+    event.preventDefault();
+    const ingredients = ingredientsInput.value.toLowerCase().split(",").map(item => item.trim());
+    const matchingRecipes = recipes.filter(recipe =>
+        ingredients.every(ingredient => recipe.ingredients.includes(ingredient))
+    );
+    displayRecipes(matchingRecipes, recipeList);
+});
+
+// Initial display of favorites
+displayRecipes(recipes.filter(recipe => recipe.favorite), favoritesList);

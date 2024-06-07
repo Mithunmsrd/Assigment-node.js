@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping Cart</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  th, td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  #total {
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<h2>Shopping Cart</h2>
+
+<table id="cart">
+  <thead>
+    <tr>
+      <th>Item Name</th>
+      <th>Quantity</th>
+      <th>Price per Item</th>
+      <th>Total Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Cart items will be dynamically inserted here -->
+  </tbody>
+</table>
+
+<div id="total">Total: Rs0.00</div>
+
+<script>
+  // Dummy data for cart items
+  const cartItems = [
+    { name: "Apple", quantity: 2, price: 30 },
+    { name: "Banana", quantity: 1, price: 25 },
+    { name: "Orange", quantity: 3, price: 30 }
+  ];
+
+  // Function to display cart items
+  function displayCartItems() {
+    const tbody = document.querySelector("#cart tbody");
+    let total = 0;
+
+    tbody.innerHTML = "";
+
+    cartItems.forEach(item => {
+      const totalItemPrice = item.quantity * item.price;
+      total += totalItemPrice;
+
+      const row = `
+        <tr>
+          <td>${item.name}</td>
+          <td>${item.quantity}</td>
+          <td>Rs${item.price.toFixed(2)}</td>
+          <td>Rs${totalItemPrice.toFixed(2)}</td>
+        </tr>
+      `;
+      tbody.innerHTML += row;
+    });
+
+    document.getElementById("total").innerText = `Total: Rs${total.toFixed(2)}`;
+  }
+
+  // Display initial cart items
+  displayCartItems();
+</script>
+
+</body>
+</html>

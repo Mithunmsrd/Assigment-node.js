@@ -1,0 +1,30 @@
+function getTimeframe(minutes) {
+    if (minutes >= 0 && minutes <= 600) {
+        return "Early morning";
+    } else if (minutes <= 780) {
+        return "Morning";
+    } else if (minutes <= 960) {
+        return "Noon";
+    } else if (minutes <= 1140) {
+        return "Afternoon";
+    } else if (minutes <= 1320) {
+        return "Evening";
+    } else if (minutes <= 1439) {
+        return "Night";
+    } else {
+        return "Invalid input";
+    }
+}
+
+// Test the function
+const readline = require('readline');
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+rl.question("Enter the number of minutes: ", (input_minutes) => {
+    const timeframe = getTimeframe(parseInt(input_minutes));
+    console.log("Timeframe:", timeframe);
+    rl.close();
+});

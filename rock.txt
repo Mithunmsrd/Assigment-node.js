@@ -1,0 +1,55 @@
+const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+const options = ["rock", "paper", "scissors", "snake", "water"];
+
+// Function to get computer's choice with unequal odds
+function getComputerChoice() {
+  const rand = Math.random();
+  if (rand < 0.3) return "rock"; // 30% chance
+  if (rand < 0.6) return "paper"; // 30% chance
+  return "scissors"; // 40% chance
+}
+
+// Function to determine the winner
+function determineWinner(userChoice, computerChoice) {
+  if (
+    (userChoice === "rock" && (computerChoice === "scissors" || computerChoice === "snake")) ||
+    (userChoice === "scissors" && computerChoice === "paper") ||
+    (userChoice === "paper" && computerChoice === "rock") ||
+    (userChoice === "snake" && (computerChoice === "water" || computerChoice === "paper")) ||
+    (userChoice === "water" && (computerChoice === "rock" || computerChoice === "scissors"))
+  ) {
+    return "You win!";
+  } else if (userChoice === computerChoice) {
+    return "It's a tie!";
+  } else {
+    return "Computer wins!";
+  }
+}
+
+// Function to start the game
+function startGame() {
+  rl.question("Choose: rock, paper, scissors, snake, or water? ", (userChoice) => {
+    userChoice = userChoice.toLowerCase();
+    if (!options.includes(userChoice)) {
+      console.log("Invalid choice. Please choose again.");
+      startGame();
+      return;
+    }
+    
+    const computerChoice = getComputerChoice();
+    console.log(`Computer chose: ${computerChoice}`);
+    
+    const result = determineWinner(userChoice, computerChoice);
+    console.log(result);
+
+    rl.close();
+  });
+}
+
+startGame();
